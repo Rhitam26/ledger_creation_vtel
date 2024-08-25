@@ -2,8 +2,8 @@ import pandas as pd
 import os
 from openpyxl.styles import colors, Font, PatternFill, Alignment, Border, Side
 from openpyxl import load_workbook
-from spire.xls import *
-from spire.xls.common import *
+# from spire.xls import *
+# from spire.xls.common import *
 
 
 """
@@ -180,25 +180,38 @@ for name, group in invoice_df:
 
 
     temp_df = temp_df.sort_values(by="date_time", ignore_index=True, ascending=True)
-    print(temp_df)
-    # remove the date_time column
-    temp_df = temp_df.drop(columns=['date_time'])
-    name_row = ["",name,"","","",""]
-
-    temp_df.loc[0]= name_row
-    temp_df.loc[1]= output_COLUMNS
-    row = ["","","","BALANCE B/F",outstanding,""]
-    temp_df.loc[2] = row
     
+    # remove the date_time column
+
+    temp_df = temp_df.drop(columns=['date_time'])
+
+    row = ["","","","BALANCE B/F",outstanding,""]
+    new_df = pd.DataFrame([row])
+    temp_df = pd.concat([new_df,temp_df],ignore_index=True)
+
+    new_df = pd.DataFrame([output_COLUMNS])
+    temp_df = pd.concat([new_df,temp_df],ignore_index=True)
+
+    name_row = ["",name,"","","",""]
+    new_df = pd.DataFrame([name_row])
+    temp_df = pd.concat([new_df,temp_df],ignore_index=True)
+    
+
+    
+    
+    
+    # drop column 0
+    temp_df = temp_df.drop(columns=[0])
+  
+    print("Temp DF: ",temp_df)
+    print("Columns: ",temp_df.columns)
     row =["","","","BALANCE :",total_amount, ""]
-
     temp_df.loc[len(temp_df)]= row
-
-
     row= ["","","","","", ""]
     temp_df.loc[len(temp_df)]= row
     row= ["","","","","", ""]
     temp_df.loc[len(temp_df)]= row
+    print("Temp DF: ",temp_df)
 
     if is_first_customer:
         row_index=3
@@ -241,7 +254,7 @@ for row_index in row_index_lst:
         ws[colour_row[i]].fill = fillers[0]
         
     for i in range(0,len(bal_row)):
-        if i==4:
+        if i==3:
             ws[bal_row[i]].fill = fillers[2]
 
         
@@ -294,31 +307,31 @@ for idx in range(0,len(row_index_lst)):
     wb.close()
 
 
-# print("Count of colour rows: ",len(row_index_lst))
-# print("Count of final balance rows: ",len(fin_bal_lst))
-# print("NEW  Final Balance List: ",fin_bal_lst)
-# print("Row Index List: ",row_index_lst)
-# print("Last Table Length: ",last_table_len)
+print("Count of colour rows: ",len(row_index_lst))
+print("Count of final balance rows: ",len(fin_bal_lst))
+print("NEW  Final Balance List: ",fin_bal_lst)
+print("Row Index List: ",row_index_lst)
+print("Last Table Length: ",last_table_len)
 
 
-workbook = Workbook()
+# workbook = Workbook()
 
-workbook.LoadFromFile(file_name)
-worksheet = workbook.Worksheets[0]
+# workbook.LoadFromFile(file_name)
+# worksheet = workbook.Worksheets[0]
 
-wb = load_workbook(file_name)
-ws= wb['Sheet1']
-for i in range(0,len(row_index_lst)):
-    first_row_index = row_index_lst[i]-1
-    last_row_index = fin_bal_lst[i]
-    cell_range = worksheet.Range["A"+str(first_row_index)+":F"+str(last_row_index)]
-    cell_range.BorderAround(LineStyleType.Thick, Color.get_Black())
-    cell_range.BorderInside(LineStyleType.Thin, Color.get_Black())
+# wb = load_workbook(file_name)
+# ws= wb['Sheet1']
+# for i in range(0,len(row_index_lst)):
+#     first_row_index = row_index_lst[i]-1
+#     last_row_index = fin_bal_lst[i]
+#     cell_range = worksheet.Range["A"+str(first_row_index)+":F"+str(last_row_index)]
+#     cell_range.BorderAround(LineStyleType.Thick, Color.get_Black())
+#     cell_range.BorderInside(LineStyleType.Thin, Color.get_Black())
     
-    workbook.SaveToFile(file_name)
-    # align the text to the center
+#     workbook.SaveToFile(file_name)
+#     # align the text to the center
 
 
   
-workbook.Dispose()
+# workbook.Dispose()
 
