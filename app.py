@@ -6,6 +6,7 @@ from openpyxl import load_workbook
 # from spire.xls.common import *
 
 
+
 """
 
 This piee code is used to generate a report for the customer's outstanding amount. 
@@ -27,6 +28,7 @@ payments_df = pd.read_excel("PAYMENTS.xlsx")
 returns_df = pd.read_excel("RETURNS.xlsx")
 outstanding_df = pd.read_excel("Customer's Outstanding Amount.xlsx")
 
+url = 'https://docs.google.com/spreadsheets/d/1XidWszsCj-eVQP4392IhP_ebGeI4DTFtUcpjsJe7SD8/edit?usp=sharing'
 
 # groupby invoice_df by NAME and get the quantity of each item 
 invoice_df = invoice_df.groupby("CUSTOMERNAME")
